@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ── Light Mode ─────────────────────────────────── */
+  --bg-primary:        #F4F2EE;
+  --bg-sidebar:        #FFFFFF;
+  --bg-chat:           #EAE6DC;
+  --bg-bubble-out:     #D4EDCA;
+  --bg-bubble-in:      #FFFFFF;
+  --bg-hover:          #EFECE7;
+  --bg-active:         #E4DED4;
+  --bg-input:          #FFFFFF;
+  --bg-elevated:       #FFFFFF;
+  --bg-overlay:        rgba(0,0,0,0.45);
+  --bg-tooltip:        #2D2D2D;
+  --bg-skeleton:       #E8E4DE;
+  --bg-skeleton-shine: #F0EDE7;
+
+  --text-primary:      #111111;
+  --text-secondary:    #6B7280;
+  --text-placeholder:  #A1A8B3;
+  --text-link:         #2F7A52;
+  --text-accent:       #2F7A52;
+  --text-bubble-out:   #111111;
+  --text-bubble-in:    #111111;
+  --text-timestamp:    #A1A8B3;
+  --text-system:       #8A919E;
+  --text-tooltip:      #FFFFFF;
+
+  --accent:            #3A7D5B;
+  --accent-hover:      #2C6347;
+  --accent-pressed:    #235039;
+  --accent-light:      #E6F4ED;
+  --accent-rgb:        58, 125, 91;
+
+  --danger:            #E53E3E;
+  --danger-hover:      #C53030;
+  --warning:           #D97706;
+  --success:           #38A169;
+
+  --border:            #E3DFD8;
+  --border-subtle:     #EDE9E2;
+  --divider:           #E3DFD8;
+
+  --check-single:      #A1A8B3;
+  --check-double:      #A1A8B3;
+  --check-read:        #3A7D5B;
+
+  --shadow-xs:         0 1px 2px rgba(0,0,0,0.06);
+  --shadow-sm:         0 1px 4px rgba(0,0,0,0.08);
+  --shadow-md:         0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg:         0 8px 28px rgba(0,0,0,0.14);
+  --shadow-xl:         0 16px 48px rgba(0,0,0,0.18);
+
+  --radius-xs:         4px;
+  --radius-sm:         8px;
+  --radius-md:         12px;
+  --radius-lg:         16px;
+  --radius-xl:         24px;
+  --radius-full:       9999px;
+  --radius-bubble-out: 18px 18px 4px 18px;
+  --radius-bubble-in:  18px 18px 18px 4px;
+
+  --transition-fast:   100ms ease;
+  --transition-base:   160ms ease;
+  --transition-slow:   260ms ease;
+  --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --sidebar-width:     340px;
+  --right-panel-width: 360px;
+  --chat-max-width:    720px;
+
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.dark {
+  /* ── Dark Mode ─────────────────────────────────── */
+  --bg-primary:        #0E0E17;
+  --bg-sidebar:        #14141F;
+  --bg-chat:           #09090F;
+  --bg-bubble-out:     #2C1F5A;
+  --bg-bubble-in:      #1A1A2C;
+  --bg-hover:          #1C1C2C;
+  --bg-active:         #242434;
+  --bg-input:          #181828;
+  --bg-elevated:       #1C1C2C;
+  --bg-overlay:        rgba(0,0,0,0.65);
+  --bg-tooltip:        #2C2C3E;
+  --bg-skeleton:       #1E1E2E;
+  --bg-skeleton-shine: #242436;
+
+  --text-primary:      #ECEAF5;
+  --text-secondary:    #9896B0;
+  --text-placeholder:  #65637A;
+  --text-link:         #9B7FD4;
+  --text-accent:       #A78BFA;
+  --text-bubble-out:   #ECEAF5;
+  --text-bubble-in:    #ECEAF5;
+  --text-timestamp:    #65637A;
+  --text-system:       #7A7890;
+  --text-tooltip:      #ECEAF5;
+
+  --accent:            #7C5CBF;
+  --accent-hover:      #6A4DA8;
+  --accent-pressed:    #5A3E90;
+  --accent-light:      #241850;
+  --accent-rgb:        124, 92, 191;
+
+  --danger:            #FC8181;
+  --danger-hover:      #F56565;
+  --warning:           #F6AD55;
+  --success:           #68D391;
+
+  --border:            #28283E;
+  --border-subtle:     #1E1E30;
+  --divider:           #28283E;
+
+  --check-single:      #65637A;
+  --check-double:      #65637A;
+  --check-read:        #A78BFA;
+
+  --shadow-xs:         0 1px 2px rgba(0,0,0,0.3);
+  --shadow-sm:         0 1px 4px rgba(0,0,0,0.4);
+  --shadow-md:         0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:         0 8px 28px rgba(0,0,0,0.6);
+  --shadow-xl:         0 16px 48px rgba(0,0,0,0.7);
+}
+
+body {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  font-family: var(--font-inter);
+  letter-spacing: -0.01em;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-placeholder);
+}
+
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Chat Wallpaper */
+.chat-wallpaper {
+  background-color: var(--bg-chat);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%238B7355' stroke-opacity='0.07' stroke-width='1'%3E%3Ccircle cx='20' cy='40' r='20'/%3E%3Ccircle cx='20' cy='40' r='15'/%3E%3Ccircle cx='20' cy='40' r='10'/%3E%3Ccircle cx='20' cy='40' r='5'/%3E%3Ccircle cx='0' cy='20' r='20'/%3E%3Ccircle cx='0' cy='20' r='15'/%3E%3Ccircle cx='0' cy='20' r='10'/%3E%3Ccircle cx='0' cy='20' r='5'/%3E%3Ccircle cx='40' cy='20' r='20'/%3E%3Ccircle cx='40' cy='20' r='15'/%3E%3Ccircle cx='40' cy='20' r='10'/%3E%3Ccircle cx='40' cy='20' r='5'/%3E%3Ccircle cx='20' cy='0' r='20'/%3E%3Ccircle cx='20' cy='0' r='15'/%3E%3Ccircle cx='20' cy='0' r='10'/%3E%3Ccircle cx='20' cy='0' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.dark .chat-wallpaper {
+  background-color: var(--bg-chat);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='15' r='1.5'/%3E%3Ccircle cx='35' cy='45' r='2'/%3E%3Ccircle cx='65' cy='25' r='1'/%3E%3Ccircle cx='80' cy='70' r='1.5'/%3E%3Ccircle cx='45' cy='80' r='2'/%3E%3Ccircle cx='20' cy='65' r='1'/%3E%3Ccircle cx='90' cy='15' r='2.5'/%3E%3C/g%3E%3Cg stroke='%239B7FD4' stroke-opacity='0.05' stroke-width='0.75' fill='none'%3E%3Cline x1='10' y1='15' x2='35' y2='45'/%3E%3Cline x1='35' y1='45' x2='65' y2='25'/%3E%3Cline x1='65' y1='25' x2='90' y2='15'/%3E%3Cline x1='80' y1='70' x2='45' y2='80'/%3E%3Cline x1='45' y1='80' x2='20' y2='65'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Animations Helper */
+.scale-in {
+  transform-origin: top left;
+  animation: scaleIn var(--transition-fast) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

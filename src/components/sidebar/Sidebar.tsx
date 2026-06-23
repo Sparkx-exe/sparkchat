@@ -33,11 +33,13 @@ export const Sidebar: React.FC = () => {
                       initial={{ opacity: 0, y: 10, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                      whileHover={{ scale: 1.05, x: -2 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => {
                         setModal('createGroup', true);
                         setFabOpen(false);
                       }}
-                      className="flex items-center gap-2 px-3 py-2 bg-bg-elevated border border-border-subtle shadow-md rounded-full text-[11px] font-semibold text-text-primary hover:bg-bg-hover transition-colors"
+                      className="flex items-center gap-2 px-3.5 py-2 bg-bg-elevated border border-border-subtle shadow-md rounded-full text-[11px] font-semibold text-text-primary hover:bg-bg-hover transition-colors focus:outline-none"
                     >
                       <Users size={14} className="text-accent" />
                       <span>New Group</span>
@@ -48,11 +50,13 @@ export const Sidebar: React.FC = () => {
                       initial={{ opacity: 0, y: 10, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                      whileHover={{ scale: 1.05, x: -2 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => {
                         setModal('newChat', true);
                         setFabOpen(false);
                       }}
-                      className="flex items-center gap-2 px-3 py-2 bg-bg-elevated border border-border-subtle shadow-md rounded-full text-[11px] font-semibold text-text-primary hover:bg-bg-hover transition-colors"
+                      className="flex items-center gap-2 px-3.5 py-2 bg-bg-elevated border border-border-subtle shadow-md rounded-full text-[11px] font-semibold text-text-primary hover:bg-bg-hover transition-colors focus:outline-none"
                     >
                       <MessageSquare size={14} className="text-accent" />
                       <span>New Message</span>
@@ -61,9 +65,12 @@ export const Sidebar: React.FC = () => {
                 )}
               </AnimatePresence>
               
-              <button
+              <motion.button
                 onClick={() => setFabOpen(!fabOpen)}
-                className="w-12 h-12 rounded-full bg-accent hover:bg-accent-hover active:bg-accent-pressed text-white flex items-center justify-center shadow-lg transition-colors focus:outline-none"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
+                transition={{ type: 'spring', damping: 15, stiffness: 400 }}
+                className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent-hover text-white flex items-center justify-center shadow-lg focus:outline-none hover:ring-4 hover:ring-accent/20 transition-all duration-200"
               >
                 <motion.div
                   animate={{ rotate: fabOpen ? 45 : 0 }}
@@ -71,7 +78,7 @@ export const Sidebar: React.FC = () => {
                 >
                   <Edit2 size={18} />
                 </motion.div>
-              </button>
+              </motion.button>
             </div>
           </div>
         </>

@@ -61,7 +61,7 @@ export interface Message {
   conversation_id: string;
   sender_id: string | null;
   content: string | null;
-  type: 'text' | 'image' | 'video' | 'audio' | 'file' | 'sticker' | 'system' | 'voice_note' | 'poll' | 'link_preview';
+  type: 'text' | 'image' | 'video' | 'audio' | 'file' | 'sticker' | 'system' | 'voice_note' | 'poll' | 'link_preview' | 'call';
   media_url: string | null;
   media_name: string | null;
   media_size: number | null;

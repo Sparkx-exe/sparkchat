@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { Spinner } from '@/components/ui/Spinner';
 import toast from 'react-hot-toast';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const { login, loading } = useAuth();
+  const searchParams = useSearchParams();
+  const showConfirmBanner = searchParams.get('confirm') === 'true';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +78,11 @@ export default function LoginPage() {
       </p>
 
       <form onSubmit={handleSubmit} className="w-full space-y-4">
+        {showConfirmBanner && (
+          <div className="text-success text-sm font-medium bg-success/10 border border-success/20 rounded-md p-3 text-center">
+            ✅ Account created! Please check your email and click the confirmation link before logging in.
+          </div>
+        )}
         {error && (
           <div className="text-danger text-sm font-medium bg-danger/10 border border-danger/20 rounded-md p-3 text-center">
             {error}
@@ -139,5 +147,19 @@ export default function LoginPage() {
         </Link>
       </p>
     </motion.div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-[400px] flex flex-col items-center justify-center min-h-[300px]">
+          <Spinner size="lg" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

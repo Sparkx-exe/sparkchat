@@ -39,14 +39,14 @@ export const SidebarHeader: React.FC = () => {
 
       {/* Search Input bar */}
       <div className="flex-1 relative flex items-center">
-        <span className="absolute left-3 text-text-placeholder">
+        <span className="absolute left-3 text-text-placeholder/70">
           <Search size={14} />
         </span>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-8 pr-8 py-1.5 rounded-md bg-bg-input border border-border text-text-primary placeholder-text-placeholder text-xs focus:outline-none focus:border-accent transition-colors"
+          className="w-full pl-8 pr-8 py-1.5 rounded-full bg-bg-input/60 border border-border/30 text-text-primary placeholder-text-placeholder text-xs focus:outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 transition-all duration-200"
           placeholder="Search"
         />
         {searchQuery && (

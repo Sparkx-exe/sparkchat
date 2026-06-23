@@ -57,37 +57,41 @@ export function useAuth() {
         options: {
           data: {
             display_name: displayName,
-            username: username,
+            username: username.toLowerCase(),
             phone: phone || null,
           },
         },
       });
-      if (error) throw error;
 
+      if (error) throw error;
       if (!data.user) throw new Error('No user data returned');
 
-      // Loop check to wait for DB trigger to complete profile creation
+      // If email confirmation is required, session will be null
+      if (!data.session) {
+        toast.success('Check your email to confirm your account!');
+        router.push('/login?confirm=true');
+        return;
+      }
+
+      // Wait for the DB trigger to create the profile
       let profile = null;
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 8; i++) {
         const { data: p } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
           .single();
-        if (p) {
-          profile = p;
-          break;
-        }
-        await new Promise((res) => setTimeout(res, 500));
+        if (p) { profile = p; break; }
+        await new Promise((r) => setTimeout(r, 500));
       }
 
       setSession(data.user, profile);
-      toast.success('Account created successfully!');
+      toast.success('Welcome to SparkChat! 🎉');
       router.push('/');
       router.refresh();
     } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || 'Failed to sign up');
+      console.error('Signup error:', error);
+      toast.error(error?.message || 'Failed to sign up');
       throw error;
     } finally {
       setLoading(false);

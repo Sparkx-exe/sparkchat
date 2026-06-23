@@ -40,13 +40,9 @@ export const Avatar: React.FC<AvatarProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative select-none rounded-full flex items-center justify-center text-white shrink-0 overflow-visible ${
+      className={`relative select-none rounded-full flex items-center justify-center text-white shrink-0 overflow-visible ${sizeClasses[size]} ${
         onClick ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''
       } ${className}`}
-      style={{
-        width: sizeClasses[size].split(' ')[0].replace('w-', ''), // fallback widths
-        height: sizeClasses[size].split(' ')[1].replace('h-', ''),
-      }}
     >
       {src ? (
         <img
@@ -60,7 +56,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         />
       ) : (
         <div
-          className={`w-full h-full rounded-full flex items-center justify-center font-medium ${sizeClasses[size]}`}
+          className="w-full h-full rounded-full flex items-center justify-center font-medium"
           style={{ backgroundColor: bgColor }}
         >
           {initials}

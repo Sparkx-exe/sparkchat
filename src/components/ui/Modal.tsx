@@ -35,7 +35,7 @@ export const Modal: React.FC<ModalProps> = ({
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: 'spring', duration: 0.3 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 350 }}
             className={`relative z-10 w-full ${maxWidth} bg-bg-sidebar border border-border-subtle shadow-xl rounded-md overflow-hidden flex flex-col max-h-[90vh]`}
           >
             {/* Header */}

@@ -3,11 +3,14 @@ import { Skeleton } from '@/components/ui/Skeleton';
 
 export const ChatListSkeleton: React.FC = () => {
   return (
-    <div className="w-full h-full p-2 space-y-3.5 select-none overflow-hidden bg-bg-sidebar">
+    <div className="w-full h-full py-2 select-none overflow-hidden bg-bg-sidebar">
       {Array.from({ length: 7 }).map((_, index) => (
-        <div key={index} className="flex items-center gap-3.5 px-3 py-1">
+        <div
+          key={index}
+          className="flex items-center gap-3 px-3.5 py-2.5 mx-3 my-1.5 rounded-xl border border-[var(--border-subtle)] bg-bg-input/60 shadow-xs"
+        >
           {/* Avatar Skeleton */}
-          <Skeleton variant="circular" className="w-11 h-11 shrink-0" />
+          <Skeleton variant="circular" className="w-9 h-9 shrink-0" />
           
           {/* Details Skeletons */}
           <div className="flex-1 space-y-2 min-w-0">

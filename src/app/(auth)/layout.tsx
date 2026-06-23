@@ -2,10 +2,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Toaster } from 'react-hot-toast';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-bg-primary text-text-primary">
+      <Toaster position="top-center" />
       {/* Decorative left panel */}
       <div className="hidden md:flex md:w-1/2 bg-accent flex-col justify-center items-center p-12 text-white relative select-none">
         <div className="absolute inset-0 bg-gradient-to-br from-accent to-accent-pressed opacity-95" />

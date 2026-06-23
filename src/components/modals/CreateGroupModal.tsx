@@ -28,25 +28,25 @@ export const CreateGroupModal: React.FC = () => {
     setLoading(true);
 
     try {
-      const { data: conv, error: convError } = await supabase
+      const convId = crypto.randomUUID();
+      const { error: convError } = await supabase
         .from('conversations')
         .insert({
+          id: convId,
           type: 'group',
           name: name.trim(),
           description: description.trim() || null,
           created_by: user.id,
-        })
-        .select()
-        .single();
+        });
 
       if (convError) throw convError;
 
       const { error: memberError } = await supabase
         .from('conversation_members')
         .insert({
-          conversation_id: conv.id,
+          conversation_id: convId,
           user_id: user.id,
-          role: 'owner',
+          role: 'admin',
         });
 
       if (memberError) throw memberError;
@@ -65,7 +65,7 @@ export const CreateGroupModal: React.FC = () => {
           ),
           messages(
             *,
-            sender:profiles(*)
+            sender:profiles!messages_sender_id_fkey(*)
           )
         `)
         .order('updated_at', { ascending: false });

@@ -6,6 +6,10 @@ import Avatar from '@/components/ui/Avatar';
 import { User, Bookmark, Users, Settings, ChevronRight, LogOut } from 'lucide-react';
 import MoreSubMenu from './MoreSubMenu';
 import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { useChatStore } from '@/stores/chatStore';
+import { supabase } from '@/lib/supabase/client';
+import toast from 'react-hot-toast';
 
 interface HamburgerMenuProps {
   onClose: () => void;
@@ -16,8 +20,87 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onClose }) => {
   const { setModal } = useUIStore();
   const { logout } = useAuth();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const router = useRouter();
 
   if (!profile) return null;
+
+  const handleOpenSavedMessages = async () => {
+    onClose();
+    try {
+      // 1. Search for existing saved messages chat
+      const { data: existing, error } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('type', 'saved')
+        .eq('created_by', profile.id)
+        .limit(1);
+
+      if (error) throw error;
+
+      let conversationId = '';
+
+      if (existing && existing.length > 0) {
+        conversationId = existing[0].id;
+      } else {
+        // 2. Create new saved messages chat
+        const convId = crypto.randomUUID();
+        const { error: convError } = await supabase
+          .from('conversations')
+          .insert({
+            id: convId,
+            type: 'saved',
+            name: 'Saved Messages',
+            created_by: profile.id,
+          });
+
+        if (convError) throw convError;
+
+        const { error: memberError } = await supabase
+          .from('conversation_members')
+          .insert({
+            conversation_id: convId,
+            user_id: profile.id,
+            role: 'owner',
+          });
+
+        if (memberError) throw memberError;
+
+        conversationId = convId;
+      }
+
+      // 3. Fetch full conversation data to add to local Zustand store
+      const { data: convData } = await supabase
+        .from('conversations')
+        .select(`
+          *,
+          members:conversation_members(
+            *,
+            profile:profiles(*)
+          ),
+          messages(
+            *,
+            sender:profiles!messages_sender_id_fkey(*)
+          )
+        `)
+        .eq('id', conversationId)
+        .single();
+
+      if (convData) {
+        // Set display name for saved chats
+        convData.name = 'Saved Messages';
+        const { conversations, setConversations, setActiveConversationId } = useChatStore.getState();
+        if (!conversations.find((c) => c.id === conversationId)) {
+          setConversations([convData as any, ...conversations]);
+        }
+        setActiveConversationId(conversationId);
+      }
+
+      router.push(`/chat/${conversationId}`);
+    } catch (err: any) {
+      console.error('Error opening Saved Messages:', err);
+      toast.error('Failed to open Saved Messages');
+    }
+  };
 
   return (
     <motion.div
@@ -63,10 +146,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onClose }) => {
               </button>
 
               <button
-                onClick={() => {
-                  setModal('savedMessages', true);
-                  onClose();
-                }}
+                onClick={handleOpenSavedMessages}
                 className="w-full px-4 py-1.5 flex items-center gap-3 hover:bg-bg-hover text-xs text-text-primary transition-colors text-left"
               >
                 <Bookmark size={14} className="text-text-secondary" />

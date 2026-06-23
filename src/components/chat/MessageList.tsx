@@ -21,8 +21,8 @@ export const MessageList: React.FC = () => {
 
   // Scroll to bottom on new messages
   useEffect(() => {
-    if (rowVirtualizer.count > 0) {
-      rowVirtualizer.scrollToIndex(rowVirtualizer.count - 1);
+    if (conversationMessages.length > 0) {
+      rowVirtualizer.scrollToIndex(conversationMessages.length - 1);
     }
   }, [conversationMessages.length, rowVirtualizer]);
 
@@ -35,8 +35,8 @@ export const MessageList: React.FC = () => {
   };
 
   const handleScrollToBottom = () => {
-    if (rowVirtualizer.count > 0) {
-      rowVirtualizer.scrollToIndex(rowVirtualizer.count - 1);
+    if (conversationMessages.length > 0) {
+      rowVirtualizer.scrollToIndex(conversationMessages.length - 1);
     }
   };
 

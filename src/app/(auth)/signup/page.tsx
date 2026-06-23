@@ -120,8 +120,24 @@ export default function SignupPage() {
       return;
     }
 
-    if (usernameStatus !== 'available') {
-      setError('Please choose an available username');
+    if (usernameStatus === 'checking') {
+      setError('Still checking username availability — please wait a moment');
+      return;
+    }
+
+    if (usernameStatus === 'taken') {
+      setError('That username is already taken — please choose another');
+      return;
+    }
+
+    if (usernameStatus === 'invalid') {
+      setError(usernameMessage || 'Username is invalid');
+      return;
+    }
+
+    if (usernameStatus === 'idle' || usernameStatus !== 'available') {
+      // Trigger the check manually by re-setting username
+      setError('Please type your username to check availability');
       return;
     }
 
@@ -138,7 +154,11 @@ export default function SignupPage() {
     try {
       await signup(email, password, displayName, username.toLowerCase(), phone);
     } catch (err: any) {
-      setError(err.message || 'Failed to create account');
+      console.error('Signup error:', err);
+      const errorMsg = typeof err === 'string' 
+        ? err 
+        : err.message || (err.error_description) || JSON.stringify(err) || 'Failed to create account';
+      setError(errorMsg);
     }
   };
 
@@ -311,8 +331,8 @@ export default function SignupPage() {
 
         <button
           type="submit"
-          disabled={loading || usernameStatus !== 'available'}
-          className="w-full py-3 rounded-md bg-accent hover:bg-accent-hover active:bg-accent-pressed text-white font-semibold transition-colors flex items-center justify-center text-sm shadow-sm disabled:opacity-50"
+          disabled={loading}
+          className="w-full py-3 rounded-md bg-accent hover:bg-accent-hover text-white font-semibold transition-colors flex items-center justify-center text-sm shadow-sm disabled:opacity-50"
         >
           {loading ? <Spinner size="sm" className="mr-2 border-t-white" /> : 'Create account'}
         </button>

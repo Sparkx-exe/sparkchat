@@ -53,17 +53,63 @@ export const SearchResults: React.FC = () => {
   const handleGlobalResultClick = async (profile: Profile) => {
     if (!user) return;
     try {
+      console.log('Global search click on profile:', profile);
       const { data: convId, error } = await supabase.rpc(
         'get_or_create_direct_conversation',
         { user_a: user.id, user_b: profile.id }
       );
       if (error) throw error;
+      console.log('RPC get_or_create_direct_conversation returned id:', convId);
+
+      // Fetch the conversation with all member/profile data so the store is populated
+      // before we navigate — this ensures ChatHeader renders immediately
+      const { data: convData, error: fetchErr } = await supabase
+        .from('conversations')
+        .select(`
+          *,
+          members:conversation_members(
+            *,
+            profile:profiles(*)
+          ),
+          messages(
+            *,
+            sender:profiles!messages_sender_id_fkey(*)
+          )
+        `)
+        .eq('id', convId)
+        .single();
+
+      if (fetchErr) {
+        console.error('Failed to fetch newly created conversation:', fetchErr);
+      }
+      console.log('Fetched convData:', convData);
+
+      if (convData) {
+        // Set display name for direct conversations
+        const otherMember = convData.members?.find((m: any) => m.user_id !== user.id);
+        if (otherMember?.profile) {
+          convData.name = otherMember.profile.display_name;
+          convData.avatar_url = otherMember.profile.avatar_url;
+          convData.avatar_blurhash = otherMember.profile.avatar_blurhash;
+        }
+        const msgs = convData.messages || [];
+        convData.last_message = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+
+        // Prepend to conversations list if not already there
+        const { conversations, setConversations, setActiveConversationId } = useChatStore.getState();
+        console.log('Conversations in store before add:', conversations);
+        if (!conversations.find((c) => c.id === convId)) {
+          const newConversations = [convData as any, ...conversations];
+          setConversations(newConversations);
+          console.log('Conversations in store after set:', useChatStore.getState().conversations);
+        }
+        setActiveConversationId(convId);
+        console.log('Active conversation ID set in store to:', useChatStore.getState().activeConversationId);
+      }
 
       setSearchQuery('');
       router.push(`/chat/${convId}`);
-      if (isMobileView) {
-        setIsSidebarVisible(false);
-      }
+      if (isMobileView) setIsSidebarVisible(false);
     } catch (err) {
       console.error('Error starting conversation:', err);
     }
@@ -89,7 +135,7 @@ export const SearchResults: React.FC = () => {
             <div
               key={c.id}
               onClick={() => handleLocalResultClick(c)}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-bg-hover cursor-pointer"
+              className="flex items-center gap-3 px-3.5 py-2 mx-3 my-1.5 cursor-pointer select-none transition-all rounded-xl border border-[var(--border-subtle)] bg-bg-input hover:bg-bg-hover hover:border-[var(--border)] shadow-xs"
             >
               <Avatar name={c.name || 'Chat'} src={c.avatar_url} size="xs" />
               <div>
@@ -115,7 +161,7 @@ export const SearchResults: React.FC = () => {
             <div
               key={p.id}
               onClick={() => handleGlobalResultClick(p)}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-bg-hover cursor-pointer"
+              className="flex items-center gap-3 px-3.5 py-2 mx-3 my-1.5 cursor-pointer select-none transition-all rounded-xl border border-[var(--border-subtle)] bg-bg-input hover:bg-bg-hover hover:border-[var(--border)] shadow-xs"
             >
               <Avatar name={p.display_name} src={p.avatar_url} size="xs" />
               <div>
